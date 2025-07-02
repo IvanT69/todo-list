@@ -1,1 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>To-Do List App</title>
+  <link rel="stylesheet" href="To_Do List styles.css" />
+</head>
+<body>
+  <div class="todo-container">
+    <h1>My To-Do List</h1>
+    <form id="task-form" class="task-form">
+	  <table cellpadding="10" align="center">
+	  <tr>
+      <td><input type="text" id="title" placeholder="Task Title" required /></td>
+	  </tr>
+	  <tr>
+	  	<td>
+      <textarea id="description" placeholder="Task Description"></textarea></td>
+	  </tr>
+	  <tr>
+		  <td>
+      		<select id="priority">
+        		<option value="high">High</option>
+        		<option value="medium" selected>Medium</option>
+        		<option value="low">Low</option>
+      		</select>
+	  	  </td>
+	  </tr>
+	  <tr>
+      	<td><button type="submit">Add Task</button></td>
+	  </tr>
+    </table>
+    </form>
+    <ul id="task-list"></ul>
+  </div>
+  <script>
+	let currentEditTask = null;
 
+document.getElementById('task-form').addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  const title = document.getElementById('title').value;
+  const desc = document.getElementById('description').value;
+  const priority = document.getElementById('priority').value;
+
+  if (currentEditTask) {
+    currentEditTask.querySelector('h3').textContent = title;
+    currentEditTask.querySelector('.desc').textContent = desc;
+    currentEditTask.querySelector('.priority').textContent = `Priority: ${priority}`;
+    currentEditTask.className = priority;
+    currentEditTask = null;
+    document.querySelector('#task-form button').textContent = 'Add Task';
+  } else {
+    const taskItem = document.createElement('li');
+    taskItem.className = priority;
+    taskItem.innerHTML = `
+      <h3>${title}</h3>
+      <p class="desc">${desc}</p>
+      <p class="priority">Priority: ${priority}</p>
+      <button onclick="toggleComplete(this)">Complete</button>
+      <button onclick="editTask(this)">Edit</button>
+      <button onclick="deleteTask(this)">Delete</button>
+    `;
+    document.getElementById('task-list').appendChild(taskItem);
+  }
+
+  document.getElementById('task-form').reset();
+});
+
+function toggleComplete(btn) {
+  btn.parentElement.classList.toggle('completed');
+}
+
+function deleteTask(btn) {
+  const task = btn.parentElement;
+  if (task === currentEditTask) {
+    document.getElementById('task-form').reset();
+    document.querySelector('#task-form button').textContent = 'Add Task';
+    currentEditTask = null;
+  }
+  task.remove();
+}
+
+function editTask(btn) {
+  const task = btn.parentElement;
+  const title = task.querySelector('h3').textContent;
+  const desc = task.querySelector('.desc').textContent;
+  const priority = task.querySelector('.priority').textContent.replace('Priority: ', '');
+
+  document.getElementById('title').value = title;
+  document.getElementById('description').value = desc;
+  document.getElementById('priority').value = priority;
+
+  currentEditTask = task;
+  document.querySelector('#task-form button').textContent = 'Update Task';
+}
+
+  </script>
+</body>
+</html>
