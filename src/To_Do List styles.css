@@ -7,7 +7,7 @@ body {
 }
 
 h1{
-	text-align: center;
+  text-align: center;
 }
 
 .todo-container {
@@ -19,7 +19,7 @@ h1{
 }
 
 .task-form{
-	text-align: center;
+  text-align: center;
 }
 
 .completed {
@@ -32,7 +32,7 @@ h1{
 .low { border-left: 5px solid green; }
 
 .high, .medium, .low {
-	padding-left: 10px;
+  padding-left: 10px;
 }
 
 @media (max-width: 600px) {
